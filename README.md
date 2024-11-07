@@ -12,27 +12,22 @@ This is an invite-only fish registration database built in Laravel. This applica
 
 ## Installation
 
-1. **Clone the repository**:
-   git clone https://github.com/jeffreydekker/poecilianederland.git
-   cd poecilianederland
-Install dependencies:
+git clone https://github.com/jeffreydekker/poecilianederland.git
+cd poecilianederland
 
+Install dependencies:
 composer install
 npm install
 npm run dev
-Environment Configuration:
 
+Environment Configuration:
 Copy .env.example to .env.
 Update database credentials in the .env file.
 
-php artisan key:generate
-
 Database Setup:
-
 php artisan migrate
 
 Start the Application:
-
 php artisan serve
 
 Usage
@@ -44,7 +39,6 @@ User Registration: Admins can invite users, who will then receive an email with 
 -Make yourself an admin by going into the database and set your user colomn "isAdmin" to 1
 -Enable the middleware of /beheerder route again to secure the admin page
 -You can now use the whole application
-
 
 Technologies Used:
 Laravel backend framework
