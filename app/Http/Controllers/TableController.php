@@ -30,9 +30,21 @@ class TableController extends Controller
         return view('visregistratie', ['all' => $all, 'soortnamen' => $soortnamen, 'ondersoorten' => $ondersoorten, 'vangplaatsen' => $vangplaatsen]);
     }
 
-    public function showTableAll(User $user, Registratie $registraties) {
-        $registraties = Registratie::with('gebruiker')->paginate(5);
-        
+    public function showTableAll(User $user, Registratie $registraties)
+    {
+        // Fetch registrations and enforce alphabetical sorting by 'geslachtsnaam'
+        $registraties = Registratie::with('gebruiker')
+            ->getQuery() // Reset any previous sorting
+            ->orders = null;
+
+        $registraties = Registratie::with('gebruiker')
+            ->orderBy('geslachtsnaam', 'asc')
+            ->paginate(5);
+
+            dd(
+                Registratie::with('gebruiker')->orderBy('geslachtsnaam', 'asc')->toSql()
+            );
+
         return view('table-all', [
             'registraties' => $registraties
         ]);
@@ -40,7 +52,7 @@ class TableController extends Controller
 
     public function profiel(User $user, Registratie $registratie) {
         return view('table-user', [
-            'username' => $user->username, 
+            'username' => $user->username,
             'registraties' => Registratie::with('gebruiker')->paginate(5)
         ]);
     }
@@ -92,7 +104,7 @@ class TableController extends Controller
     public function deleteRegistratie(Registratie $registratie ) {
 
         if(auth()->user()->cannot('delete', $registratie)) {
-            
+
             return 'U heeft niet de bevoegdheden om dat uit te voeren.';
         }
 

@@ -10,10 +10,12 @@
                 <!-- Geslachtsnaam -->
                 <label for="geslachtsnaam"><strong>Geslachtsnaam</strong></label>
                 <select name="geslachtsnaam" id="geslachtsnaam" class="form-control mb-2" style="width: 100%">
-                    <option value="{{ old('geslachtsnaam', $registratie->geslachtsnaam) }}" selected>{{ $registratie->geslachtsnaam }}</option>
+                    <option value="" disabled {{ old('geslachtsnaam', $registratie->geslachtsnaam) ? '' : 'selected' }}>---Selecteer een optie---</option>
                     @foreach ($all as $row)
-                        @if ($row->geslachtsnaam && $row->geslachtsnaam != $registratie->geslachtsnaam)
-                            <option value="{{ $row->geslachtsnaam }}">{{ $row->geslachtsnaam }}</option>
+                        @if ($row->geslachtsnaam)
+                            <option value="{{ $row->geslachtsnaam }}" {{ old('geslachtsnaam', $registratie->geslachtsnaam) == $row->geslachtsnaam ? 'selected' : '' }}>
+                                {{ $row->geslachtsnaam }}
+                            </option>
                         @endif
                     @endforeach
                 </select>
@@ -24,10 +26,12 @@
                 <!-- Soortnaam -->
                 <label for="soortnaam"><strong>Soortnaam</strong></label>
                 <select name="soortnaam" id="soortnaam" class="form-control mb-2" style="width: 100%">
-                    <option value="{{ old('soortnaam', $registratie->soortnaam) }}" selected>{{ $registratie->soortnaam }}</option>
-                    @foreach ($all as $row)
-                        @if ($row->soortnaam && $row->soortnaam != $registratie->soortnaam)
-                            <option value="{{ $row->soortnaam }}">{{ $row->soortnaam }}</option>
+                    <option value="" disabled {{ old('soortnaam', $registratie->soortnaam) ? '' : 'selected' }}>---Selecteer een optie---</option>
+                    @foreach ($soortnamen as $row)
+                        @if ($row->soortnaam)
+                            <option value="{{ $row->soortnaam }}" {{ old('soortnaam', $registratie->soortnaam) == $row->soortnaam ? 'selected' : '' }}>
+                                {{ $row->soortnaam }}
+                            </option>
                         @endif
                     @endforeach
                 </select>
@@ -38,10 +42,12 @@
                 <!-- Ondersoort -->
                 <label for="ondersoort"><strong>Ondersoort</strong></label>
                 <select name="ondersoort" id="ondersoort" class="form-control mb-2" style="width: 100%">
-                    <option value="{{ old('ondersoort', $registratie->ondersoort) }}" selected>{{ $registratie->ondersoort }}</option>
-                    @foreach ($all as $row)
-                        @if ($row->ondersoort && $row->ondersoort != $registratie->ondersoort)
-                            <option value="{{ $row->ondersoort }}">{{ $row->ondersoort }}</option>
+                    <option value="" disabled {{ old('ondersoort', $registratie->ondersoort) ? '' : 'selected' }}>---Selecteer een optie---</option>
+                    @foreach ($ondersoorten as $row)
+                        @if ($row->ondersoort)
+                            <option value="{{ $row->ondersoort }}" {{ old('ondersoort', $registratie->ondersoort) == $row->ondersoort ? 'selected' : '' }}>
+                                {{ $row->ondersoort }}
+                            </option>
                         @endif
                     @endforeach
                 </select>
@@ -52,10 +58,12 @@
                 <!-- Vangplaats -->
                 <label for="vangplaats"><strong>Vangplaats</strong></label>
                 <select name="vangplaats" id="vangplaats" class="form-control mb-2" style="width: 100%">
-                    <option value="{{ old('vangplaats', $registratie->vangplaats) }}" selected>{{ $registratie->vangplaats }}</option>
-                    @foreach ($all as $row)
-                        @if ($row->vangplaats && $row->vangplaats != $registratie->vangplaats)
-                            <option value="{{ $row->vangplaats }}">{{ $row->vangplaats }}</option>
+                    <option value="" disabled {{ old('vangplaats', $registratie->vangplaats) ? '' : 'selected' }}>---Selecteer een optie---</option>
+                    @foreach ($vangplaatsen as $row)
+                        @if ($row->vangplaats)
+                            <option value="{{ $row->vangplaats }}" {{ old('vangplaats', $registratie->vangplaats) == $row->vangplaats ? 'selected' : '' }}>
+                                {{ $row->vangplaats }}
+                            </option>
                         @endif
                     @endforeach
                 </select>
@@ -76,11 +84,11 @@
                     <fieldset class="mt-3">
                         <strong>{{ $label }}</strong>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" id="{{ $field }}Ja" name="{{ $field }}" value="Ja" {{ $registratie->$field == 'Ja' ? 'checked' : '' }}>
+                            <input class="form-check-input" type="radio" id="{{ $field }}Ja" name="{{ $field }}" value="Ja" {{ old($field, $registratie->$field) == 'Ja' ? 'checked' : '' }}>
                             <label class="form-check-label" for="{{ $field }}Ja">Ja</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" id="{{ $field }}Nee" name="{{ $field }}" value="Nee" {{ $registratie->$field == 'Nee' ? 'checked' : '' }}>
+                            <input class="form-check-input" type="radio" id="{{ $field }}Nee" name="{{ $field }}" value="Nee" {{ old($field, $registratie->$field) == 'Nee' ? 'checked' : '' }}>
                             <label class="form-check-label" for="{{ $field }}Nee">Nee</label>
                         </div>
                         @error($field)
@@ -88,7 +96,7 @@
                         @enderror
                     </fieldset>
                 @endforeach
-
+        
                 <!-- Notitie -->
                 <label for="notitie" class="text-muted mt-4 mb-2"><small><strong>Notitie</strong></small></label>
                 <textarea name="notitie" id="notitie" class="form-control" maxlength="100" rows="4">{{ old('notitie', $registratie->notitie) }}</textarea>
@@ -105,5 +113,6 @@
                 </p>
             </div>
         </form>
+
     </div>
 </x-layout>

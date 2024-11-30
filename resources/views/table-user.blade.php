@@ -1,44 +1,44 @@
 <x-layout>
 
-  <div class="container-xxl  container--wide">
+    <div class="container-xxl  container--wide">
     <br>
     <h1 style="text-align:center; margin-top:0%"><strong>{{$username}}</strong></h1>
     <br>
 
     {{-- Table user registrations --}}
     <div style="" class="container-sm">
-      <div style="margin-bottom: 3px" class="d-flex justify-content-between align-items-center">
-          {{-- Search and import options --}}
-          <div style="display: inline-block" class="search-container">
-              <form action="{{ route('profiel', ['user' => $user->lidnummer]) }}" method="GET">
-                  <input type="text" name="search" value="{{ request()->input('search') }}" placeholder="Zoeken">
-                  <button type="submit"><i class="fas fa-search"></i></button>
-              </form>
-          </div>
+        <div style="margin-bottom: 3px" class="d-flex justify-content-between align-items-center">
+            {{-- Search and import options --}}
+            <div style="display: inline-block" class="search-container">
+                <form action="{{ route('profiel', ['user' => $user->lidnummer]) }}" method="GET">
+                    <input type="text" name="search" value="{{ request()->input('search') }}" placeholder="Zoeken">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
 
-          {{-- Export buttons --}}
-          <div class="export-table" style="display: inline-block; font-family: Arial, sans-serif;">
+        {{-- Export buttons --}}
+        <div class="export-table" style="display: inline-block; font-family: Arial, sans-serif;">
             <span style="margin-right: 10px; font-weight: bold; color: #333;">Exporteer opties</span>
             <button type="button" id="btnXlsx" class="export-btn">XLSX</button>
             <button type="button" id="btnXls" class="export-btn">XLS</button>
             <button type="button" id="btnCsv" class="export-btn">CSV</button>
         </div>
-      </div>
+    </div>
 
-      <div>
+    <div>
         <table class="table table-hover" id="tableUser" style="cursor: pointer">
-          <thead>
+        <thead>
             <tr>
-              <th onclick="sortTableUser(0)"style="width: 70px"><strong>Aangemaakt</strong></th>
-              <th onclick="sortTableUser(1)" style="width: 100px"><strong>Geslachtsnaam</strong></th>
-              <th onclick="sortTableUser(2)"style="width: 150px"><strong>Soortnaam</strong></th>
-              <th onclick="sortTableUser(3)"style="width: 150px"><strong>Ondersoort</strong></th>
-              <th onclick="sortTableUser(4)"style="width: 150px"><strong>Vangplaats</strong></th>
-              <th onclick="sortTableUser(5)"style="width: 40px"><strong>AS</strong></th>
-              <th onclick="sortTableUser(6)"style="width: 40px"><strong>KV</strong></th>
-              <th onclick="sortTableUser(7)"style="width: 40px"><strong>NB</strong></th>
-              <th onclick="sortTableUser(8)" style="width: 10px; text-align:center"><strong><i class="fa-solid fa-circle-question"></i></strong></th>
-              <th style="width: 40px"><strong><i style="color:white; text-align:center; align-items:center" class="fas fa-trash center"></i></strong></th>
+            <th onclick="sortTableUser(0)"style="width: 70px"><strong>Aangemaakt</strong></th>
+            <th onclick="sortTableUser(1)" style="width: 100px"><strong>Geslachtsnaam</strong></th>
+            <th onclick="sortTableUser(2)"style="width: 150px"><strong>Soortnaam</strong></th>
+            <th onclick="sortTableUser(3)"style="width: 150px"><strong>Ondersoort</strong></th>
+            <th onclick="sortTableUser(4)"style="width: 200px"><strong>Vangplaats</strong></th>
+            <th onclick="sortTableUser(5)"style="width: 40px"><strong>AS</strong></th>
+            <th onclick="sortTableUser(6)"style="width: 40px"><strong>KV</strong></th>
+            <th onclick="sortTableUser(7)"style="width: 40px"><strong>NB</strong></th>
+            <th onclick="sortTableUser(8)" style="width: 10px; text-align:center"><strong><i class="fa-solid fa-circle-question"></i></strong></th>
+            <th style="width: 40px"><strong><i style="color:white; text-align:center; align-items:center" class="fas fa-trash center"></i></strong></th>
             </tr>
           </thead>
 
@@ -63,7 +63,7 @@
             @endif
           </td>
           @can('delete', $registratie)
-          <td style="text-align:center; vertical-align:middle">            
+          <td style="text-align:center; vertical-align:middle">
             <form class="delete-post-form d-inline" action="/registratie/{{ $registratie->id }}" method="POST">
               @csrf
               @method('DELETE')
@@ -74,11 +74,11 @@
         </tr>
         @endforeach
       </table>
-    
+
       {{-- pagination: --}}
       <div style="text-align: right; color:black" class="d-flex justify-content-end">
         {{ $registraties->appends(request()->all())->links() }}
       </div>
     </div>
-  
+
 </x-layout>

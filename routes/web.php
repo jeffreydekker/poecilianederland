@@ -24,14 +24,6 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 |
 */
 
-// // Blog post routes
-    Route::get('/create-post', [PostController::class, 'showCreateForm'])->middleware('MustBeLoggedIn');
-    Route::post('/store-post', [PostController::class, 'storeNewPost'])->middleware('MustBeLoggedIn');
-    Route::get('/post/{post}', [PostController::class, 'viewSinglePost'])->middleware('auth');
-// // Profile related routes:
-    Route::get('/profile/{user:lidnummer}', [UserController::class, 'showProfile'])->middleware('MustBeLoggedIn');
-// --------------------------------------------------------------------------------------------------------------------------------
-
 // <><><><>AQUATORY PROJECT ROUTES<><><><><>
 // MODERATOR RELATED ROUTES
 Route::get('/beheerder', [UserController::class, 'showModPage'])->middleware('auth', 'IsVerified', 'MustBeAdmin');
@@ -51,7 +43,7 @@ Route::delete('/registratieviabeheerder/{registratie}', [UserController::class, 
     Route::post('/logout', [UserController::class, 'logout'])->middleware('MustBeLoggedIn', 'auth');
     Route::get('/visregistratie', [TableController::class, 'registratieFormulier'])->middleware('auth', 'IsVerified');
     Route::post('/registratie-opslaan', [TableController::class, 'registratieOpslaan'])->middleware('auth', 'IsVerified');
-    
+
     Route::get('/profiel/{user:lidnummer}', [UserController::class, 'profiel'])->name('profiel')->middleware('auth', 'MustBeLoggedIn');
 
     // PROFILE SETTINGS
@@ -67,10 +59,10 @@ Route::delete('/registratieviabeheerder/{registratie}', [UserController::class, 
     Route::get('/registratie/{registratie}', [UserController::class, 'showSingleRegistratie'])->name('registratie.show')->middleware('auth', 'IsVerified');
     Route::delete('/registratie/{registratie', [UserController::class, 'deleteSingleRegistratie'])->middleware('auth', 'IsVerified', 'can:delete,registratie');
     // Fetch, update and delete records from the DB routes
-    Route::get('/table-all', [UserController::class,'showTableAll'])->name('showTableAll')->middleware('auth', 'IsVerified', 'MustBeLoggedIn');
+    Route::get('/overzicht', [UserController::class,'showTableAll'])->name('showTableAll')->middleware('auth', 'IsVerified', 'MustBeLoggedIn');
     Route::delete('/registratie/{registratie}', [TableController::class, 'deleteRegistratie'])->middleware('auth', 'IsVerified');
     Route::get('/registratie-wijzigen/{registratie}/wijzigen', [UserController::class, 'registratieWijzigenFormulier'])->middleware('auth', 'IsVerified', 'can:update,registratie');
-    Route::put('/registratie/{registratie}', [UserController::class, 'registratieWijzigen'])->middleware('can:update,registratie'); 
+    Route::put('/registratie/{registratie}', [UserController::class, 'registratieWijzigen'])->middleware('can:update,registratie');
 
     // Password reset routes:
     Route::get('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.request')->middleware('guest');

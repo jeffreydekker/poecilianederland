@@ -38,8 +38,8 @@ class UserController extends Controller
             'achternaam' => ['required', 'min:2', 'max:20'],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
         ]);
-        
-        // Strip the content of the incoming request from malicious html 
+
+        // Strip the content of the incoming request from malicious html
         // with php built in strip_tags function
         $incomingFields['lidnummer'] = strip_tags(($incomingFields['lidnummer']));
         $incomingFields['naam'] = strip_tags(($incomingFields['naam']));
@@ -48,7 +48,7 @@ class UserController extends Controller
         $incomingFields['password'] = $this->random_password(8);
         $incomingFields['verified'] = false;
         $incomingFields['password_updated_at'] = Carbon::now();
-        
+
         // registers a user record in the DB
         User::create($incomingFields);
 
@@ -65,7 +65,7 @@ class UserController extends Controller
     }
 
     public function showCorrectHomepage(User $user, Registratie $registraties) {
-        // Shows different homepage based on if the user is logged in 
+        // Shows different homepage based on if the user is logged in
         // or not
         if(auth()->check()) {
             // auth()->logout();
@@ -80,7 +80,7 @@ class UserController extends Controller
         $users = User::with('registraties')->paginate(5)->fragment('users');
         $registraties = Registratie::with('gebruiker')->paginate(5)->fragment('registraties');
         $options = DB::table('options')->paginate(5)->fragment('options');
-        
+
         return view('/beheerder', [
             'users' => $users,
             'options' => $options,
@@ -103,13 +103,13 @@ class UserController extends Controller
         if (session() === NULL) {
             return redirect('/');
         }
-    
+
         // Get the search query
         $search = $request->input('search');
-    
+
         // Define the query using Eloquent (to include relationships)
         $query = Registratie::with('gebruiker'); // Assuming 'gebruiker' is a relationship
-    
+
         // Apply the search filter if a search query is present
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
@@ -122,31 +122,31 @@ class UserController extends Controller
                 $q->where('lidnummer', 'like', "%$search%");
             });
         }
-    
+
         // Sort by a column (if any) with default sorting
-        $sortBy = $request->input('sort_by', 'created_at');  // Default column to sort
-        $sortOrder = $request->input('sort_order', 'desc');  // Default sorting order
-    
+        $sortBy = $request->input('sort_by', 'geslachtsnaam');  // Default column to sort
+        $sortOrder = $request->input('sort_order', 'asc');  // Default sorting order
+
         // Apply ordering and pagination
         $registraties = $query->orderBy($sortBy, $sortOrder)->paginate(10);
-    
+
         // Return the view with the results
         return view('table-all', compact('registraties', 'search', 'sortBy', 'sortOrder'));
     }
-    
+
 
     public function profiel(User $user, Request $request) {
         // redirects to homepage of the app with the correct header
         if(session() === NULL) {
             return redirect('/');
         }
-    
+
         // Get the search query
         $search = $request->input('search');
-    
+
         // Define the query using Eloquent (allows chaining of methods like where and orderBy)
         $query = Registratie::where('user_id', $user->id); // Assuming each registration belongs to a user
-    
+
         // Apply the search filter if a search query is present
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
@@ -156,15 +156,15 @@ class UserController extends Controller
                 ->orWhere('ondersoort', 'like', "%$search%");
             });
         }
-    
+
         // Sort by a column (if any) with default sorting
-        $sortBy = $request->input('sort_by', 'created_at');  // Default column to sort
-        $sortOrder = $request->input('sort_order', 'desc');  // Default sorting order
-    
+        $sortBy = $request->input('sort_by', 'geslachtsnaam');  // Default column to sort
+        $sortOrder = $request->input('sort_order', 'asc');  // Default sorting order
+
         // Apply ordering and pagination
         $registraties = $query->orderBy($sortBy, $sortOrder)->paginate(10);
         $username = $user->naam . ' ' .  $user->achternaam;
-    
+
         return view('table-user', compact('username', 'registraties', 'search', 'sortBy', 'sortOrder', 'user'));
     }
 
@@ -184,13 +184,13 @@ class UserController extends Controller
             if (!Hash::check($request->currentPassword, $user->password)) {
                 return back()->with('error', 'Current password is incorrect.');
             }
-            
+
             $user->password = Hash::make($request->newPassword);
             $user->verified = 1;
-            
+
             /** @var \App\Models\User $user **/
             $user->save();
-    
+
             return redirect()->back()->with('success', 'Password updated successfully.');
     }
 
@@ -262,8 +262,23 @@ class UserController extends Controller
     }
 
     public function registratieWijzigenFormulier(Registratie $registratie) {
-        $all = DB::table('options')->get();
-        return view('edit-visregistratie', ['all' => $all, 'registratie' => $registratie]);
+        $all = DB::table('options')
+            ->orderByRaw('geslachtsnaam COLLATE utf8mb4_unicode_ci ASC')
+            ->get();
+
+        $soortnamen = DB::table('options')
+            ->orderByRaw('soortnaam COLLATE utf8mb4_unicode_ci ASC')
+            ->get();
+
+        $ondersoorten = DB::table('options')
+            ->orderByRaw('ondersoort COLLATE utf8mb4_unicode_ci ASC')
+            ->get();
+
+        $vangplaatsen = DB::table('options')
+            ->orderByRaw('vangplaats COLLATE utf8mb4_unicode_ci ASC')
+            ->get();
+
+        return view('edit-visregistratie', ['all' => $all, 'registratie' => $registratie, 'soortnamen' => $soortnamen, 'ondersoorten' => $ondersoorten, 'vangplaatsen' => $vangplaatsen]);
     }
 
     public function registratieWijzigen(Request $request, Registratie $registratie) {
@@ -356,7 +371,7 @@ class UserController extends Controller
         ]);
 
         $user = Auth::user();
-        
+
         if (!Hash::check($request->current_password, $user->password)) {
             return redirect()->back()->withErrors(['current_password' => 'Huidige wachtwoord was incorrect.']);
         }

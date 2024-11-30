@@ -34,7 +34,7 @@
                             <th onclick="sortAll(1)" style="width: 120px"><strong>Geslachtsnaam</strong></th>
                             <th onclick="sortAll(2)"style="width: 125px"><strong>Soortnaam</strong></th>
                             <th onclick="sortAll(3)"style="width: 125px"><strong>Ondersoort</strong></th>
-                            <th onclick="sortAll(4)"style="width: 250px"><strong>Vangplaats</strong></th>
+                            <th onclick="sortAll(4)"style="width: 200px"><strong>Vangplaats</strong></th>
                             <th onclick="sortAll(5)"style="width: 40px"><strong>AS</strong></th>
                             <th onclick="sortAll(6)"style="width: 40px"><strong>KV</strong></th>
                             <th onclick="sortAll(7)"style="width: 40px"><strong>NB</strong></th>
